@@ -10,6 +10,12 @@ describe('Country Model tests', () => {
         city: 'Paris',
     }
 
+    const editTest = {
+        id: 2,
+        name: 'Nigeria',
+        city: 'Lagos',
+    }
+
     it( 'should make an instance of a country', () => {
         const country = new Country({id:4, ...testCountry});
 
@@ -52,5 +58,12 @@ describe('Country Model tests', () => {
         expect(countryToDelete).toEqual({ id: countryToDeleteId, ...testCountry });
         expect(countryData).not.toContain(countryToDelete);
     });
+
+    it('should edit a current country', () => {
+        const id = editTest.id
+        Country.editCountry(id,editTest);
+        const allCountries = Country.all
+        expect(allCountries).not.toContain({id:2, name: 'Wales', city: 'Cardiff'})
+    })
 
 })
