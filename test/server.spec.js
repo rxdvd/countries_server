@@ -12,6 +12,12 @@ describe('Api server', () => {
         city: 'Paris',
     };
 
+    let editTest = {
+        id: 2,
+        name: 'Nigeria',
+        city: 'Lagos',
+    }
+
     beforeAll(() => {
         // start the server and store it in the api variable
         api = app.listen(5500, () =>
@@ -51,7 +57,7 @@ describe('Api server', () => {
     });
 
     it('responds to delete /country/:id with status 204', async () => {
-        await request(api).delete('/country/4').expect(204);
+        await request(api).delete('/country/4').expect(200);
 
         const updatedCountry = await request(api).get('/country');
 
@@ -64,6 +70,19 @@ describe('Api server', () => {
 
     it('responds to invalid method request with 405', (done) => {
         request(api).post('/').expect(405, done);
+    });
+
+    it('responds to post /country/edit/:id with status 200', (done) => {
+        request(api)
+            .post('/country/edit/2')
+            .send(editTest)
+            .set('Accept', /application\/json/)
+            .expect(200)
+            .expect('country has been edited', done);
+    });
+
+    it('responds to a unknown country id with a 404', (done) => {
+        request(api).get('/country/edit/42').expect(404).expect({}, done);
     });
 
 })

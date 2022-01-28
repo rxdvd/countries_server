@@ -33,9 +33,23 @@ class Country{
         return newCountry;
     }
 
+    static editCountry(id,countryEd) {
+        try {
+            let countryInfo = countryData.filter((country) => country.id === id)[0];
+            countryInfo['name'] = countryEd.name
+            countryInfo['city'] = countryEd.city
+            const country = new Country(countryInfo);
+            return country;
+        } catch (err) {
+            throw new Error('That country does not exist!');
+        }
+        
+    }
+
     deleteCountry() {
         const country = countryData.filter((country) => country.id === this.id)[0];
         countryData.splice(countryData.indexOf(country),1)
+        return "country has been deleted"
     }
 }
 
